@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; }
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    14% { transform: scale(1.08); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.12); }
+    70% { transform: scale(1); }
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(110vh) translateX(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.8; }
+    90% { opacity: 0.8; }
+    100% { transform: translateY(-10vh) translateX(var(--drift, 40px)) rotate(360deg); opacity: 0; }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes shimmer {
+    0%, 100% { text-shadow: 0 0 20px rgba(220,38,66,0.3); }
+    50% { text-shadow: 0 0 40px rgba(220,38,66,0.5), 0 0 60px rgba(255,182,193,0.4); }
+  }
+</style>
+</helmet>
+<div style="min-height:100vh;width:100%;background:radial-gradient(ellipse at center, #fff5f7 0%, #ffe4ec 40%, #ffc9d9 100%);position:relative;overflow:hidden;font-family:'Cormorant Garamond', serif;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;box-sizing:border-box;">
+
+  <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;">
+    <sc-for list="{{ hearts }}" as="h" hint-placeholder-count="14">
+      <div style="position:absolute;bottom:0;left:{{h.left}}%;font-size:{{h.size}}px;color:rgba(220,38,66,{{h.op}});animation:floatUp {{h.dur}}s linear infinite;animation-delay:{{h.delay}}s;--drift:{{h.drift}}px;">♥</div>
+    </sc-for>
+  </div>
+
+  <div style="text-align:center;position:relative;z-index:2;animation:fadeInUp 1.4s ease-out both;">
+    <div style="font-family:'Great Vibes', cursive;font-size:clamp(28px,4vw,44px);color:#b83a5a;margin-bottom:8px;letter-spacing:1px;">com todo o meu amor,</div>
+    <h1 style="font-family:'Great Vibes', cursive;font-weight:400;font-size:clamp(48px,8vw,92px);color:#c62348;margin:0 0 8px 0;line-height:1.05;animation:shimmer 3s ease-in-out infinite;">
+      Feliz Aniversário<br/>de Casamento, Alice!
+    </h1>
+  </div>
+
+  <div style="position:relative;z-index:2;margin:40px 0 32px;">
+    <div style="position:absolute;inset:-20px;background:radial-gradient(circle,rgba(255,182,193,0.6),transparent 70%);filter:blur(20px);"></div>
+    <svg viewBox="0 0 200 180" width="clamp(220px,32vw,340px)" height="auto" style="position:relative;display:block;filter:drop-shadow(0 20px 40px rgba(198,35,72,0.35));animation:heartbeat 1.6s ease-in-out infinite;transform-origin:center;">
+      <defs>
+        <linearGradient id="hg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#ff6b8a"/>
+          <stop offset="60%" stop-color="#dc2642"/>
+          <stop offset="100%" stop-color="#8b1029"/>
+        </linearGradient>
+        <radialGradient id="hs" cx="0.35" cy="0.3" r="0.5">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.7)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+        </radialGradient>
+      </defs>
+      <path d="M100,170 C100,170 15,115 15,60 C15,30 40,10 65,10 C82,10 95,20 100,35 C105,20 118,10 135,10 C160,10 185,30 185,60 C185,115 100,170 100,170 Z" fill="url(#hg)"/>
+      <path d="M100,170 C100,170 15,115 15,60 C15,30 40,10 65,10 C82,10 95,20 100,35 C105,20 118,10 135,10 C160,10 185,30 185,60 C185,115 100,170 100,170 Z" fill="url(#hs)"/>
+    </svg>
+  </div>
+
+  <div style="text-align:center;position:relative;z-index:2;animation:fadeInUp 1.6s ease-out 0.3s both;">
+    <p style="font-family:'Cormorant Garamond', serif;font-style:italic;font-size:clamp(18px,2.2vw,26px);color:#7a2a3d;max-width:520px;margin:0 auto 28px;line-height:1.5;">
+      Aponte a câmera do seu celular para o QR Code<br/>e descubra uma surpresa preparada com amor.
+    </p>
+  </div>
+
+  <div style="position:relative;z-index:2;background:#fff;padding:22px;border-radius:20px;box-shadow:0 24px 60px rgba(198,35,72,0.22), 0 0 0 1px rgba(255,255,255,0.6) inset;animation:fadeInUp 1.8s ease-out 0.5s both;">
+    <div id="qrcode-box" ref="{{ qrRef }}" style="width:200px;height:200px;display:flex;align-items:center;justify-content:center;"></div>
+    <div style="text-align:center;margin-top:14px;font-family:'Inter',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#c62348;">— escaneie com amor —</div>
+  </div>
+
+  <div style="margin-top:36px;font-family:'Great Vibes',cursive;font-size:clamp(20px,2.5vw,28px);color:#b83a5a;position:relative;z-index:2;animation:fadeInUp 2s ease-out 0.7s both;">
+    ♥ &nbsp; para sempre, seu marido &nbsp; ♥
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    // ============================================================
+    //  🔧 CONFIGURAÇÃO — troque aqui a URL do menu (o QR aponta pra cá)
+    // ============================================================
+    this.MENU_URL = "https://SEU-LINK-DO-MENU-AQUI.com/menu.dc.html";
+    // ============================================================
+    this.qrRef = React.createRef();
+    this.hearts = Array.from({length: 14}).map((_, i) => ({
+      left: Math.round(Math.random() * 100),
+      size: 14 + Math.round(Math.random() * 22),
+      op: (0.15 + Math.random() * 0.35).toFixed(2),
+      dur: (10 + Math.random() * 10).toFixed(1),
+      delay: (Math.random() * 12).toFixed(1),
+      drift: Math.round(-60 + Math.random() * 120),
+    }));
+  }
+  componentDidMount() {
+    const build = () => {
+      if (!window.QRCode || !this.qrRef.current) return setTimeout(build, 100);
+      this.qrRef.current.innerHTML = "";
+      new window.QRCode(this.qrRef.current, {
+        text: this.MENU_URL,
+        width: 200,
+        height: 200,
+        colorDark: "#c62348",
+        colorLight: "#ffffff",
+        correctLevel: window.QRCode.CorrectLevel.H,
+      });
+    };
+    build();
+  }
+  renderVals() {
+    return { hearts: this.hearts, qrRef: this.qrRef };
+  }
+}
+</script>
+</body>
+</html>
